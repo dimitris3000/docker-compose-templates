@@ -1,0 +1,15 @@
+version: '2.4'
+services:
+  database1:
+    image: arangodb:latest
+    restart: unless-stopped
+    env_file:
+      - .env
+    mem_limit: 2000m
+    oom_kill_disable: true
+    network_mode: host
+    ports:
+      - 8529:8529
+    volumes:
+      - ./volumes/data:/var/lib/arangodb3
+      - ./volumes/app-data:/var/lib/arangodb3-apps
