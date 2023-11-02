@@ -1,0 +1,42 @@
+version: '2.4'
+
+services:
+  database:
+    image: 'postgres:latest'
+    restart: unless-stopped
+    ports:
+      - 15432:5432
+    env_file:
+      - .env
+    mem_limit: 2000m
+    oom_kill_disable: true
+    network_mode: host
+#   networks:
+#      - postgres-network
+    volumes:
+      - ./volumes/database-data/:/var/lib/postgresql/data/
+      - ./volumes/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: unless-stopped
+    ports:
+      - 15433:80
+    env_file:
+      - .env
+    depends_on:
+      - database
+    mem_limit: 2000m
+    network_mode: host
+    #networks:
+    #  - postgres-network
+    volumes:
+      - ./volumes/pgadmin-data/:/var/lib/pgadmin/
+
+#networks:
+#  postgres-network:
+#    driver: bridge
+
+
+
+
